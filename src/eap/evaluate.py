@@ -70,7 +70,7 @@ def evaluate_graph(model: HookedTransformer, graph: Graph, dataloader: DataLoade
         
     if model.cfg.use_normalization_before_and_after:
         # If the model also normalizes the outputs of attention heads, we'll need to take that into account when evaluating the graph.
-        attention_head_mask = torch.zeros((graph.n_forward, model.cfg.n_layers), device='cuda', dtype=model.cfg.dtype)
+        attention_head_mask = torch.zeros((graph.n_forward, model.cfg.n_layers), device=model.cfg.device, dtype=model.cfg.dtype)
         for node in graph.nodes.values():
             if isinstance(node, AttentionNode):
                 attention_head_mask[graph.forward_index(node), node.layer] = 1
