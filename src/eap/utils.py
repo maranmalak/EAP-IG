@@ -191,9 +191,9 @@ def compute_mean_activations(model: HookedTransformer, graph: Graph, dataloader:
         if not means_initialized:
             # here is where we store the means
             if per_position:
-                means = torch.zeros((n_pos, graph.n_forward, model.cfg.d_model), device='cuda', dtype=model.cfg.dtype)
+                means = torch.zeros((n_pos, graph.n_forward, model.cfg.d_model), device=model.cfg.device, dtype=model.cfg.dtype)
             else:
-                means = torch.zeros((graph.n_forward, model.cfg.d_model), device='cuda', dtype=model.cfg.dtype)
+                means = torch.zeros((graph.n_forward, model.cfg.d_model), device=model.cfg.device, dtype=model.cfg.dtype)
             means_initialized = True
 
         if per_position:
