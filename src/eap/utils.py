@@ -152,7 +152,8 @@ def compute_mean_activations(model: HookedTransformer, graph: Graph, dataloader:
         if input_lengths is not None:
             mask = torch.zeros_like(activations)
             # mask out all padding positions
-            mask[torch.arange(activations.size(0)), input_lengths - 1] = 1
+            is_real_position = torch.arange(activations.size(1), device=activations.device) < input_lengths.unsqueeze(1)
+            mask[is_real_position] = 1
             
             # we need ... because there might be a head index as well
             item_means = einsum(acts, mask, 'batch pos ... hidden, batch pos ... hidden -> batch ... hidden')
@@ -205,4 +206,4 @@ def compute_mean_activations(model: HookedTransformer, graph: Graph, dataloader:
 
     means = means.squeeze(0)
     means /= total
-    return means if per_position else means.mean(0)
+    return means
